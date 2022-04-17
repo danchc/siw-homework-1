@@ -26,6 +26,9 @@ import it.uniroma3.siw.model.Indirizzo;
 
 class EnteTest {
 
+	private List<Corso> lc = new ArrayList<Corso>();
+	private List<Allievo> la = new ArrayList<Allievo>();
+	
 	private static EntityManagerFactory emf;
 	private static EntityManager em;
 	private static EntityTransaction tx;
@@ -49,27 +52,32 @@ class EnteTest {
 	/* Abbiamo 5 classi : Docente, Corso, Allievo, Azienda, Indirizzo.
 	 * Testiamo se l'aggiunta al database avviene in maniera corretta. */
 	@Test
-	public void testPersist() throws Exception{
+	public void testPersistDocente() throws Exception{
 		/* DOCENTE */
-		List<Corso> lc = new ArrayList<Corso>();
-		Docente d1 = new Docente("Mario", "Rossi", LocalDate.now(), "Roma", (long)123 , lc);
+		Docente d1 = new Docente("Mario", "Rossi", LocalDate.now(), "Roma", (long)123 , this.lc);
 		tx.begin();
 		em.persist(d1);
 		tx.commit();
 		TypedQuery<Docente> q1 = em.createQuery("SELECT d FROM Docente d", Docente.class);
 		List<Docente> docenti = q1.getResultList();
 		assertEquals(1, docenti.size());
-		
+	}
+	
+	@Test
+	public void testPersistCorso() throws Exception{
+		Docente d1 = new Docente("Mario", "Rossi", LocalDate.now(), "Roma", (long)123 , this.lc);
 		/* CORSO */
-		List<Allievo> la = new ArrayList<Allievo>();
-		Corso c1 = new Corso("Corso 1", LocalDate.now(), 2, la, d1);
+		Corso c1 = new Corso("Corso 1", LocalDate.now(), 2, this.la, d1);
 		tx.begin();
 		em.persist(c1);
 		tx.commit();
 		TypedQuery<Corso> q2 = em.createQuery("SELECT c FROM Corso c", Corso.class);
 		List<Corso> corsi = q2.getResultList();
 		assertEquals(1, corsi.size());
-		
+	}
+	
+	@Test
+	public void testPersistAzienda() throws Exception{
 		/* AZIENDA */
 		Indirizzo i1 = new Indirizzo("via delle rose", 22, "roma", (long)12345, "roma");
 		Azienda az1 = new Azienda("rag", (long)39221022 , i1);
@@ -79,8 +87,13 @@ class EnteTest {
 		TypedQuery<Azienda> q3 = em.createQuery("SELECT a FROM Azienda a", Azienda.class);
 		List<Azienda> aziende = q3.getResultList();
 		assertEquals(1, aziende.size());
-		
+	}
+	
+	@Test
+	public void testPersistAllievo() throws Exception{
 		/* ALLIEVO */
+		Indirizzo i1 = new Indirizzo("via delle rose", 22, "roma", (long)12345, "roma");
+		Azienda az1 = new Azienda("rag", (long)39221022 , i1);
 		Allievo a1 = new Allievo("Paolo", "Rossi", LocalDate.now(), (long)12345, "pao.rossi@gmail.com", az1, lc);
 		tx.begin();
 		em.persist(a1);

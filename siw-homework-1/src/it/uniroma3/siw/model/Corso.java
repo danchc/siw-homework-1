@@ -36,8 +36,11 @@ public class Corso {
 	 * In questo caso si preferisce un Fetch di tipo Eager perchè l'utente ogni volta che andrà a richiedere
 	 * le informazioni che riguardano un certo corso bisognerà fornire anche il docente di quel determinato
 	 * corso.
+	 * Si preferisce invece un evento a cascata di tipo PERSIST perchè magari si vuole aggiungere un determinato
+	 * corso specificando un docente ancora non inserito all'interno del database, quindi per facilitare
+	 * le operazioni viene aggiunto automaticamente nel database corrente.
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
 	private Docente docente;
 	
 	/*=================================================GETTERS&SETTERS====================*/
