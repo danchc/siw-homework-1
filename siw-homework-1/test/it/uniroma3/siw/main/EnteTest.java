@@ -84,16 +84,18 @@ class EnteTest {
 		tx.begin();
 		em.persist(az1);
 		tx.commit();
-		TypedQuery<Azienda> q3 = em.createQuery("SELECT a FROM Azienda a", Azienda.class);
+		TypedQuery<Azienda> q3 = em.createQuery("SELECT az FROM Azienda az", Azienda.class);
 		List<Azienda> aziende = q3.getResultList();
-		assertEquals(1, aziende.size());
+		assertEquals(2, aziende.size());
+		assertEquals("studio", aziende.get(0).getRagioneSociale()); //si riferisce al test sottostante
+		assertEquals("rag", aziende.get(1).getRagioneSociale());
 	}
 	
 	@Test
 	public void testPersistAllievo() throws Exception{
 		/* ALLIEVO */
-		Indirizzo i1 = new Indirizzo("via delle rose", 22, "roma", (long)12345, "roma");
-		Azienda az1 = new Azienda("rag", (long)39221022 , i1);
+		Indirizzo i2 = new Indirizzo("via delle more", 43, "roma", (long)12345, "roma");
+		Azienda az1 = new Azienda("studio", (long)3945322 , i2);
 		Allievo a1 = new Allievo("Paolo", "Rossi", LocalDate.now(), (long)12345, "pao.rossi@gmail.com", az1, lc);
 		tx.begin();
 		em.persist(a1);
