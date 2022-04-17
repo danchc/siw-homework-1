@@ -19,8 +19,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.uniroma3.siw.model.Allievo;
+import it.uniroma3.siw.model.Azienda;
 import it.uniroma3.siw.model.Corso;
 import it.uniroma3.siw.model.Docente;
+import it.uniroma3.siw.model.Indirizzo;
 
 class EnteTest {
 
@@ -68,5 +70,23 @@ class EnteTest {
 		List<Corso> corsi = q2.getResultList();
 		assertEquals(1, corsi.size());
 		
+		/* AZIENDA */
+		Indirizzo i1 = new Indirizzo("via delle rose", 22, "roma", (long)12345, "roma");
+		Azienda az1 = new Azienda("rag", (long)39221022 , i1);
+		tx.begin();
+		em.persist(az1);
+		tx.commit();
+		TypedQuery<Azienda> q3 = em.createQuery("SELECT a FROM Azienda a", Azienda.class);
+		List<Azienda> aziende = q3.getResultList();
+		assertEquals(1, aziende.size());
+		
+		/* ALLIEVO */
+		Allievo a1 = new Allievo("Paolo", "Rossi", LocalDate.now(), (long)12345, "pao.rossi@gmail.com", az1, lc);
+		tx.begin();
+		em.persist(a1);
+		tx.commit();
+		TypedQuery<Allievo> q4 = em.createQuery("SELECT a from Allievo a", Allievo.class);
+		List<Allievo> allievi = q4.getResultList();
+		assertEquals(1, allievi.size());
 	}
 }
